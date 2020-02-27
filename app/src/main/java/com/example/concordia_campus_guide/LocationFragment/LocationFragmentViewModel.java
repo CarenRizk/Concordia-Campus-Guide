@@ -2,7 +2,9 @@ package com.example.concordia_campus_guide.LocationFragment;
 import android.content.Context;
 import android.graphics.Color;
 import androidx.lifecycle.ViewModel;
-import com.example.concordia_campus_guide.BuildingCode;
+import com.example.concordia_campus_guide.Model.BuildingCode;
+import com.example.concordia_campus_guide.Model.ClassroomMarkerTag;
+import com.example.concordia_campus_guide.Model.MarkerType;
 import com.example.concordia_campus_guide.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -17,11 +19,14 @@ import com.google.maps.android.geojson.GeoJsonPolygonStyle;
 import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static java.lang.Double.parseDouble;
 
 public class LocationFragmentViewModel extends ViewModel {
+
+    public HashMap<MarkerType, List<Marker>> markers = new HashMap<>();
 
     /**
      * @return return the map style
@@ -169,15 +174,16 @@ public class LocationFragmentViewModel extends ViewModel {
                         .alpha(0.90f)
         );
         marker.setTag(buildingCode);
+//        markers.add(marker);
     }
 
     /**
      * Add classroom markers to map
      * @param map
      * @param centerPos
-     * @param classNumber
+     * @param tag
      */
-    private void addClassroomMarker(GoogleMap map, LatLng centerPos, String classNumber) {
+    private void addClassroomMarker(GoogleMap map, LatLng centerPos, ClassroomMarkerTag tag) {
         Marker marker = map.addMarker(
                 new MarkerOptions()
                         .position(centerPos)
@@ -186,7 +192,8 @@ public class LocationFragmentViewModel extends ViewModel {
                         .anchor(0.5f,0.5f)
                         .alpha(0.0f)
         );
-        marker.setTag(classNumber);
+        marker.setTag(tag);
+//        markers.add(marker);
     }
 
     /**

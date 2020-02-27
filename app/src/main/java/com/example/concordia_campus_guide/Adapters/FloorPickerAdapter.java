@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 
-import com.example.concordia_campus_guide.BuildingCode;
+import com.example.concordia_campus_guide.Model.BuildingCode;
 import com.example.concordia_campus_guide.Interfaces.OnFloorPickerOnClickListener;
 import com.example.concordia_campus_guide.R;
 

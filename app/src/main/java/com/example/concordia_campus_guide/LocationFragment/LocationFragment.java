@@ -3,6 +3,7 @@ package com.example.concordia_campus_guide.LocationFragment;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,9 +19,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.concordia_campus_guide.Adapters.FloorPickerAdapter;
-import com.example.concordia_campus_guide.BuildingCode;
+import com.example.concordia_campus_guide.Model.BuildingCode;
 import com.example.concordia_campus_guide.ClassConstants;
 import com.example.concordia_campus_guide.Interfaces.OnFloorPickerOnClickListener;
+import com.example.concordia_campus_guide.Model.ClassroomMarkerTag;
 import com.example.concordia_campus_guide.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -176,14 +178,24 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
             public void onCameraMove() {
                 if(map.getCameraPosition().zoom > 20){
                     mLayer.removeLayerFromMap();
-                    //setup a different marker clickListener
+                    toggleClassroomMarkersForFloor(true, 8, BuildingCode.H);
                 }
                 else{
                     mLayer.addLayerToMap();
+                    toggleClassroomMarkersForFloor(false, 8, BuildingCode.H);
                     setupBuildingMarkerClickListener(map);
                 }
             }
         });
+    }
+
+    private void toggleClassroomMarkersForFloor(boolean visible, int floor, BuildingCode code) {
+        for(Marker marker: mViewModel.markers){
+            ClassroomMarkerTag classroomMarkerTag = (ClassroomMarkerTag) marker.getTag();
+            if(classroomMarkerTag.getFloor() == floor && classroomMarkerTag.getBuildingCode().equals(code)){
+                marker.setVisible(visible);
+            }
+        }
     }
 
     public void setupPolygonClickListener(){

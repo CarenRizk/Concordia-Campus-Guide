@@ -1,4 +1,4 @@
-package com.example.concordia_campus_guide;
+package com.example.concordia_campus_guide.Model;
 
 public enum BuildingCode {
     AD,

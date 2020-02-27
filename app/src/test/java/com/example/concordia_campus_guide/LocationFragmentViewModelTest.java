@@ -3,10 +3,7 @@ package com.example.concordia_campus_guide;
 import android.graphics.Color;
 
 import com.example.concordia_campus_guide.LocationFragment.LocationFragmentViewModel;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.maps.android.geojson.GeoJsonLayer;
+import com.example.concordia_campus_guide.Model.BuildingCode;
 import com.google.maps.android.geojson.GeoJsonPolygonStyle;
 
 import org.junit.Test;
