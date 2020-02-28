@@ -41,7 +41,7 @@ public class LocationFragmentViewModel extends ViewModel {
      * @param applicationContext is the Context of the LocationFragmentView page
      * @return It will return the layer to the LocationFragmentView to display on the map
      */
-    public GeoJsonLayer loadPolygons(GoogleMap map, Context applicationContext, int jsonFile){
+    public GeoJsonLayer loadFeatures(GoogleMap map, Context applicationContext, int jsonFile){
         GeoJsonLayer layer = initLayer(map, applicationContext, jsonFile);
         return  layer;
     }

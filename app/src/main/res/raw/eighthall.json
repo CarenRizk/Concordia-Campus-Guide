@@ -54,7 +54,7 @@
     {
       "type": "Feature",
       "properties": {
-        "roomNumber": "838"//ECA-Office
+        "roomNumber": "838"
       },
       "geometry": {
         "type": "Point",

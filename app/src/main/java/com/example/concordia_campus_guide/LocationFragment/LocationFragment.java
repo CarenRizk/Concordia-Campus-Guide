@@ -21,7 +21,6 @@ import com.example.concordia_campus_guide.Adapters.FloorPickerAdapter;
 import com.example.concordia_campus_guide.ClassConstants;
 import com.example.concordia_campus_guide.Interfaces.OnFloorPickerOnClickListener;
 import com.example.concordia_campus_guide.Model.BuildingCode;
-import com.example.concordia_campus_guide.Model.ClassroomMarkerTag;
 import com.example.concordia_campus_guide.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -163,7 +162,7 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
     }
 
     private void setupPolygons(GoogleMap map) {
-        mLayer = mViewModel.loadPolygons(map, getContext(), R.raw.buildingcoordinates);
+        mLayer = mViewModel.loadFeatures(map, getContext(), R.raw.buildingcoordinates);
         mViewModel.setPolygonStyle(mLayer,map);
         mLayer.addLayerToMap();
 
@@ -182,7 +181,7 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
                 }
                 else{
                     mLayer.addLayerToMap();
-                    setupBuildingMarkerClickListener(map);
+//                    setupBuildingMarkerClickListener(map);
                 }
             }
         });
@@ -277,17 +276,18 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
             case H:
                 mViewModel.setHallFloorplan(hallGroundOverlay, i==0?9:8);
                 // change to class coordinates
-                floorLayer = mViewModel.loadPolygons(mMap, getContext(), R.raw.eighthall);
+                floorLayer = mViewModel.loadFeatures(mMap, getContext(), i==0 ? R.raw.ninthhall : R.raw.eighthall);
+                floorLayer.addLayerToMap();
                 break;
             case MB:
                 mViewModel.setMBFloorplan(mbGroundOverlay, i==0?1:-1);
                 // change to class coordinates
-                floorLayer = mViewModel.loadPolygons(mMap, getContext(), R.raw.buildingcoordinates);
+                floorLayer = mViewModel.loadFeatures(mMap, getContext(), R.raw.buildingcoordinates);
                 break;
             case VL:
                 mViewModel.setVLFloorplan(vlGroundOverlay, i==0?2:1);
                 // change to class coordinates
-                floorLayer = mViewModel.loadPolygons(mMap, getContext(), R.raw.buildingcoordinates);
+                floorLayer = mViewModel.loadFeatures(mMap, getContext(), R.raw.buildingcoordinates);
                 break;
                 default:
                     return;
