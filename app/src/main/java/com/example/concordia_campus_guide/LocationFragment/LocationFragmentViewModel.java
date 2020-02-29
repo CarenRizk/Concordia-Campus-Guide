@@ -1,7 +1,10 @@
 package com.example.concordia_campus_guide.LocationFragment;
+
 import android.content.Context;
 import android.graphics.Color;
+
 import androidx.lifecycle.ViewModel;
+
 import com.example.concordia_campus_guide.Model.BuildingCode;
 import com.example.concordia_campus_guide.Model.ClassroomMarkerTag;
 import com.example.concordia_campus_guide.Model.MarkerType;
@@ -16,10 +19,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.geojson.GeoJsonFeature;
 import com.google.maps.android.geojson.GeoJsonLayer;
 import com.google.maps.android.geojson.GeoJsonPolygonStyle;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,29 +36,31 @@ public class LocationFragmentViewModel extends ViewModel {
     /**
      * @return return the map style
      */
-    public int getMapStyle(){
+    public int getMapStyle() {
         return R.raw.mapstyle_retro;
     }
 
     /**
      * The purpose of this method to load the overlay polygon on the map.
-     * @param map is the map used in our application.
+     *
+     * @param map                is the map used in our application.
      * @param applicationContext is the Context of the LocationFragmentView page
      * @return It will return the layer to the LocationFragmentView to display on the map
      */
-    public GeoJsonLayer loadFeatures(GoogleMap map, Context applicationContext, int jsonFile){
+    public GeoJsonLayer loadFeatures(GoogleMap map, Context applicationContext, int jsonFile) {
         GeoJsonLayer layer = initLayer(map, applicationContext, jsonFile);
-        return  layer;
+        return layer;
     }
 
     /**
      * The purpose of this method is to initiate the layer
-     * @param map is the map used in our application.
+     *
+     * @param map                is the map used in our application.
      * @param applicationContext is the Context of the LocationFragmentView page
      * @return the initiated layer or it will throw an exception if it didn't find the
-     *  GeoJson File
+     * GeoJson File
      */
-    private GeoJsonLayer initLayer(GoogleMap map, Context applicationContext, int jsonFile){
+    private GeoJsonLayer initLayer(GoogleMap map, Context applicationContext, int jsonFile) {
         GeoJsonLayer layer = null;
         try {
             layer = new GeoJsonLayer(map, jsonFile, applicationContext);
@@ -65,91 +72,94 @@ public class LocationFragmentViewModel extends ViewModel {
 
     /**
      * Generate the hall building overlays
+     *
      * @return the generate ground overlay option
      */
-    public GroundOverlayOptions getHallBuildingOverlay(){
+    public GroundOverlayOptions getHallBuildingOverlay() {
         return new GroundOverlayOptions()
                 .position(new LatLng(45.4972685, -73.5789475), (float) 68, (float) 68)
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.hall_9))
                 .bearing((float) 34);
     }
 
-    public GroundOverlay setHallFloorplan(GroundOverlay groundOverlay, int floorNb){
-        if(floorNb == 8) return setHall8Floorplan(groundOverlay);
-        else if(floorNb == 9)return setHall9Floorplan(groundOverlay);
+    public GroundOverlay setHallFloorplan(GroundOverlay groundOverlay, int floorNb) {
+        if (floorNb == 8) return setHall8Floorplan(groundOverlay);
+        else if (floorNb == 9) return setHall9Floorplan(groundOverlay);
         else return null;
     }
 
-    private GroundOverlay setHall8Floorplan(GroundOverlay groundOverlay){
+    private GroundOverlay setHall8Floorplan(GroundOverlay groundOverlay) {
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.hall_8));
         return groundOverlay;
     }
 
-    private GroundOverlay setHall9Floorplan(GroundOverlay groundOverlay){
+    private GroundOverlay setHall9Floorplan(GroundOverlay groundOverlay) {
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.hall_9));
         return groundOverlay;
     }
 
     /**
      * Generate the John Molson  building overlays
+     *
      * @return the generate ground overlay option
      */
-    public GroundOverlayOptions getMBBuildingOverlay(){
+    public GroundOverlayOptions getMBBuildingOverlay() {
         return new GroundOverlayOptions()
-                .position(new LatLng( 45.495212, -73.578926), (float) 68, (float) 68)
+                .position(new LatLng(45.495212, -73.578926), (float) 68, (float) 68)
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.mb_1))
                 .bearing((float) 34);
     }
 
-    public GroundOverlay setMBFloorplan(GroundOverlay groundOverlay, int floorNb){
-        if(floorNb == -1) return setMBS2Floorplan(groundOverlay);
-        else if(floorNb == 1) return setMB1Floorplan(groundOverlay);
+    public GroundOverlay setMBFloorplan(GroundOverlay groundOverlay, int floorNb) {
+        if (floorNb == -1) return setMBS2Floorplan(groundOverlay);
+        else if (floorNb == 1) return setMB1Floorplan(groundOverlay);
         else return null;
     }
 
-    private GroundOverlay setMBS2Floorplan(GroundOverlay groundOverlay){
+    private GroundOverlay setMBS2Floorplan(GroundOverlay groundOverlay) {
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.mb_s2));
         return groundOverlay;
     }
 
-    private GroundOverlay setMB1Floorplan(GroundOverlay groundOverlay){
+    private GroundOverlay setMB1Floorplan(GroundOverlay groundOverlay) {
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.mb_1));
         return groundOverlay;
     }
 
     /**
      * Generate the Vanier Library building overlays
+     *
      * @return the generate ground overlay option
      */
-    public GroundOverlayOptions getVLBuildingOverlay(){
+    public GroundOverlayOptions getVLBuildingOverlay() {
         return new GroundOverlayOptions()
-                .position(new LatLng( 45.45902065060446, -73.6383318901062), (float) 68, (float) 68)
+                .position(new LatLng(45.45902065060446, -73.6383318901062), (float) 68, (float) 68)
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.vl_2))
                 .bearing((float) 34);
     }
 
-    public GroundOverlay setVLFloorplan(GroundOverlay groundOverlay, int floorNb){
-        if(floorNb == 1) return setVL1Floorplan(groundOverlay);
-        else if(floorNb == 2)return setVL2Floorplan(groundOverlay);
+    public GroundOverlay setVLFloorplan(GroundOverlay groundOverlay, int floorNb) {
+        if (floorNb == 1) return setVL1Floorplan(groundOverlay);
+        else if (floorNb == 2) return setVL2Floorplan(groundOverlay);
         else return null;
     }
 
-    private GroundOverlay setVL1Floorplan(GroundOverlay groundOverlay){
+    private GroundOverlay setVL1Floorplan(GroundOverlay groundOverlay) {
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.vl_1));
         return groundOverlay;
     }
 
-    private GroundOverlay setVL2Floorplan(GroundOverlay groundOverlay){
+    private GroundOverlay setVL2Floorplan(GroundOverlay groundOverlay) {
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.vl_2));
         return groundOverlay;
     }
 
     /**
      * @param layer the GeoJson layer containing features to style.
-     * @param map the google map where layer will be displayed and markers will be added.
+     * @param map   the google map where layer will be displayed and markers will be added.
      */
-    public void setPolygonStyle(GeoJsonLayer layer, GoogleMap map){
-        for (GeoJsonFeature feature : layer.getFeatures()){
+    public void setPolygonStyle(GeoJsonLayer layer, GoogleMap map) {
+        for (GeoJsonFeature feature : layer.getFeatures()) {
             feature.setPolygonStyle(getPolygonStyle());
             String[] coordinates = feature.getProperty("center").split(", ");
             LatLng centerPos = new LatLng(parseDouble(coordinates[1]), parseDouble(coordinates[0]));
@@ -159,8 +169,9 @@ public class LocationFragmentViewModel extends ViewModel {
 
     /**
      * The purpose of this method is to add a marker on the specified building.
-     * @param map is the map used in our application.
-     * @param centerPos is the latitude and longitude of the building's center
+     *
+     * @param map          is the map used in our application.
+     * @param centerPos    is the latitude and longitude of the building's center
      * @param buildingCode is the Building on which the method will add a marker
      */
     private void addBuildingMarker(GoogleMap map, LatLng centerPos, BuildingCode buildingCode) {
@@ -169,7 +180,7 @@ public class LocationFragmentViewModel extends ViewModel {
                         .position(centerPos)
                         .icon(BitmapDescriptorFactory.fromResource(getIcon(buildingCode)))
                         .flat(true)
-                        .anchor(0.5f,0.5f)
+                        .anchor(0.5f, 0.5f)
                         .alpha(0.90f)
         );
         marker.setTag(buildingCode);
@@ -196,6 +207,7 @@ public class LocationFragmentViewModel extends ViewModel {
     /**
      * The purpose of this method is the polygons style after setting their
      * FillColor, StrokeColor and StrokeWidth
+     *
      * @return it returns the polygon style.
      */
     public GeoJsonPolygonStyle getPolygonStyle() {
@@ -207,9 +219,9 @@ public class LocationFragmentViewModel extends ViewModel {
     }
 
 
-    public List<String> getFloorsAvailable(BuildingCode buildingCode){
+    public List<String> getFloorsAvailable(BuildingCode buildingCode) {
         ArrayList<String> floorsAvailable = new ArrayList<>();
-        switch(buildingCode){
+        switch (buildingCode) {
             case H:
                 floorsAvailable.add("hall_9");
                 floorsAvailable.add("hall_8");
@@ -232,8 +244,8 @@ public class LocationFragmentViewModel extends ViewModel {
      * @param buildingCode it represents which building we will be covering
      * @return Int of drawable resource's bitmap representation
      */
-    public int getIcon(BuildingCode buildingCode){
-        switch (buildingCode){
+    public int getIcon(BuildingCode buildingCode) {
+        switch (buildingCode) {
             case H:
                 return R.drawable.h;
             case LB:
@@ -300,7 +312,17 @@ public class LocationFragmentViewModel extends ViewModel {
                 return R.drawable.ve;
             case VL:
                 return R.drawable.vl;
-                default: return -1;
+            default:
+                return -1;
         }
+    }
+
+    private void setFloorLayers(String jsonCode) {
+        try {
+            InputStream inputStream = getActivity().getAssets().open(jsonCode + ".json");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }
