@@ -28,13 +28,15 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.maps.android.geojson.GeoJsonFeature;
 import com.google.maps.android.geojson.GeoJsonLayer;
 
-import java.util.ArrayList;
+
+import java.util.HashMap;
 
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
@@ -52,9 +54,7 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
 
     private static final String TAG = "LocationFragment";
     private Boolean myLocationPermissionsGranted = false;
-    private GroundOverlay hallGroundOverlay;
-    private GroundOverlay mbGroundOverlay;
-    private GroundOverlay vlGroundOverlay;
+    private HashMap<String, GroundOverlay> buildingsGroundOverlays;
     private FloorPickerAdapter currentFloorPickerAdapter;
 
     private Button selectedFloor;
@@ -91,19 +91,14 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
         loyolaBtn = rootView.findViewById(R.id.loyolaBtn);
         mFloorPickerGv = rootView.findViewById(R.id.FloorPickerGv);
         mFloorPickerGv.setVisibility(View.GONE);
+        buildingsGroundOverlays = new HashMap<>();
     }
 
-    private void setupFloorPickerAdapter(String buildingCode) {
-        Log.i(TAG,"setting up floor picker -> " + BuildingCode.valueOf(buildingCode));
-        ArrayList<String> floorsAvailable = (ArrayList<String>) mViewModel.getFloorsAvailable(BuildingCode.valueOf(buildingCode));
-        setupFloorPickerVisibility(floorsAvailable);
+    private void setupFloorPickerAdapter(String buildingCode, String[] availableFloors) {
+        mFloorPickerGv.setVisibility(View.VISIBLE);
 
-        currentFloorPickerAdapter = new FloorPickerAdapter(getContext(), floorsAvailable, BuildingCode.valueOf(buildingCode), this);
+        currentFloorPickerAdapter = new FloorPickerAdapter(getContext(), availableFloors, buildingCode, this);
         mFloorPickerGv.setAdapter(currentFloorPickerAdapter);
-    }
-
-    private void setupFloorPickerVisibility(ArrayList<String> floorsAvailable) {
-            mFloorPickerGv.setVisibility(floorsAvailable.isEmpty()?View.GONE:View.VISIBLE);
     }
 
     @Override
@@ -138,9 +133,10 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
 
 
     private void initFloorPlans() {
-        hallGroundOverlay = mMap.addGroundOverlay(mViewModel.getHallBuildingOverlay());
-        mbGroundOverlay = mMap.addGroundOverlay(mViewModel.getMBBuildingOverlay());
-        vlGroundOverlay = mMap.addGroundOverlay(mViewModel.getVLBuildingOverlay());
+        HashMap<String, GroundOverlayOptions> temp = mViewModel.getBuildingGroundOverlays();
+        for(String key: temp.keySet()){
+            buildingsGroundOverlays.put(key, mMap.addGroundOverlay(temp.get(key)));
+        }
     }
 
     private void setMapStyle(GoogleMap googleMap) {
@@ -214,7 +210,7 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
                 }
                 else{
                     mLayer.addLayerToMap();
-//                    setupBuildingMarkerClickListener(map);
+                    setupBuildingMarkerClickListener(map);
                 }
             }
         });
@@ -231,9 +227,12 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
             public void onFeatureClick(GeoJsonFeature geoJsonFeature) {
                 //TODO: CCG-4 Make function that pops up the info card for the building (via the building-code)
                 //Important null check do not remove!
-                if(geoJsonFeature != null){
-                    //replace code here
-                    Log.i(TAG,"Clicked on "+geoJsonFeature.getProperty("code"));
+                if(geoJsonFeature != null && geoJsonFeature.getProperty("floorsAvailable")!= null){
+                    String[] floorsAvailable = geoJsonFeature.getProperty("floorsAvailable").split(",");
+                    setupFloorPickerAdapter(geoJsonFeature.getProperty("code"), floorsAvailable);
+                }
+                else {
+                    mFloorPickerGv.setVisibility(View.GONE);
                 }
             }
         });
@@ -247,14 +246,17 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                setupFloorPickerAdapter(marker.getTag().toString());
                 return false;
             }
         });
         return true;
     }
 
-
+    /**
+     * The purpose of this method is to display the tools used with google
+     * maps such as Current Location
+     * @param mMap is the map used in the application
+     */
     public boolean setupClassMarkerClickListener(GoogleMap map) {
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -332,30 +334,7 @@ public class LocationFragment extends Fragment implements OnFloorPickerOnClickLi
         if (selectedFloor != null) selectedFloor.setEnabled(true);
         selectedFloor = (Button)view;
         view.setEnabled(false);
-        if (floorLayer != null) {
-            floorLayer.removeLayerFromMap();
-        }
-        switch(currentFloorPickerAdapter.getBuildingCode()){
-            case H:
-                mViewModel.setHallFloorplan(hallGroundOverlay, position==0?9:8);
-                mViewModel.setHallFloorplan(hallGroundOverlay, position==0?9:8);
-                // change to class coordinates
-                floorLayer = mViewModel.loadFeatures(mMap, getContext(), position==0 ? R.raw.ninthhall : R.raw.eighthall);
-                floorLayer.addLayerToMap();
-                break;
-            case MB:
-                mViewModel.setMBFloorplan(mbGroundOverlay, position==0?1:-1);
-                mViewModel.setMBFloorplan(mbGroundOverlay, position==0?1:-1);
-                // change to class coordinates
-                floorLayer = mViewModel.loadFeatures(mMap, getContext(), R.raw.buildingcoordinates);
-                break;
-            case VL:
-                mViewModel.setVLFloorplan(vlGroundOverlay, position==0?2:1);
-                mViewModel.setVLFloorplan(vlGroundOverlay, position==0?2:1);
-                // change to class coordinates
-                floorLayer = mViewModel.loadFeatures(mMap, getContext(), R.raw.buildingcoordinates);
-                break;
-        }
+        mViewModel.setFloorPlan(buildingsGroundOverlays.get(currentFloorPickerAdapter.getBuildingCode()), currentFloorPickerAdapter.getBuildingCode(), currentFloorPickerAdapter.getFloorsAvailable()[position], getContext());
     }
 
     @Override
