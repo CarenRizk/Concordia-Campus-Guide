@@ -5,6 +5,8 @@ import android.graphics.Color;
 
 import androidx.lifecycle.ViewModel;
 
+// import com.example.concordia_campus_guide.BuildingCode;
+
 import com.example.concordia_campus_guide.Model.BuildingCode;
 import com.example.concordia_campus_guide.Model.ClassroomMarkerTag;
 import com.example.concordia_campus_guide.Model.MarkerType;
@@ -19,7 +21,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.maps.android.geojson.GeoJsonFeature;
 import com.google.maps.android.geojson.GeoJsonLayer;
 import com.google.maps.android.geojson.GeoJsonPolygonStyle;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,87 +73,119 @@ public class LocationFragmentViewModel extends ViewModel {
 
     /**
      * Generate the hall building overlays
-     *
      * @return the generate ground overlay option
      */
-    public GroundOverlayOptions getHallBuildingOverlay() {
+    public GroundOverlayOptions getHallBuildingOverlay(){
         return new GroundOverlayOptions()
                 .position(new LatLng(45.4972685, -73.5789475), (float) 68, (float) 68)
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.hall_9))
                 .bearing((float) 34);
     }
 
-    public GroundOverlay setHallFloorplan(GroundOverlay groundOverlay, int floorNb) {
-        if (floorNb == 8) return setHall8Floorplan(groundOverlay);
-        else if (floorNb == 9) return setHall9Floorplan(groundOverlay);
-        else return null;
+    /**
+     * @param groundOverlay
+     * @param floorNb
+     */
+    public void setHallFloorplan(GroundOverlay groundOverlay, int floorNb){
+        if(floorNb == 8)  setHall8Floorplan(groundOverlay);
+        else if(floorNb == 9) setHall9Floorplan(groundOverlay);
     }
 
-    private GroundOverlay setHall8Floorplan(GroundOverlay groundOverlay) {
+    /**
+     * set ground overlay image for Hall 8th building
+     * @param groundOverlay
+     */
+    private void setHall8Floorplan(GroundOverlay groundOverlay){
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.hall_8));
-        return groundOverlay;
     }
 
-    private GroundOverlay setHall9Floorplan(GroundOverlay groundOverlay) {
+    /**
+     * set ground overlay image for Hall 9th building
+     * @param groundOverlay
+     */
+    private void setHall9Floorplan(GroundOverlay groundOverlay){
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.hall_9));
-        return groundOverlay;
     }
 
     /**
      * Generate the John Molson  building overlays
-     *
      * @return the generate ground overlay option
      */
-    public GroundOverlayOptions getMBBuildingOverlay() {
+    public GroundOverlayOptions getMBBuildingOverlay(){
+        //400 x 570 / 645 x 645
+        //actual dimensions 22.58 x 64 -> 36.41 x 72
         return new GroundOverlayOptions()
-                .position(new LatLng(45.495212, -73.578926), (float) 68, (float) 68)
+                //45.495245, -73.578941
+                .position(new LatLng( 45.495305, -73.578885), (float) 65, (float) 65)
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.mb_1))
-                .bearing((float) 34);
+                .bearing((float) 127);
     }
 
-    public GroundOverlay setMBFloorplan(GroundOverlay groundOverlay, int floorNb) {
-        if (floorNb == -1) return setMBS2Floorplan(groundOverlay);
-        else if (floorNb == 1) return setMB1Floorplan(groundOverlay);
-        else return null;
+    /**
+     * set ground overlay image for Mb floors
+     * @param groundOverlay
+     * @param floorNb
+     */
+    public void setMBFloorplan(GroundOverlay groundOverlay, int floorNb){
+        if(floorNb == -1)  setMBS2Floorplan(groundOverlay);
+        else if(floorNb == 1)  setMB1Floorplan(groundOverlay);
     }
 
-    private GroundOverlay setMBS2Floorplan(GroundOverlay groundOverlay) {
+    /**
+     * set ground overlay image for Mb S2 floor
+     * @param groundOverlay
+     */
+    private void setMBS2Floorplan(GroundOverlay groundOverlay){
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.mb_s2));
-        return groundOverlay;
     }
 
-    private GroundOverlay setMB1Floorplan(GroundOverlay groundOverlay) {
+    /**
+     * set ground overlay image for Mb 1st floor
+     * @param groundOverlay
+     */
+    private void setMB1Floorplan(GroundOverlay groundOverlay){
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.mb_1));
-        return groundOverlay;
     }
 
     /**
      * Generate the Vanier Library building overlays
-     *
      * @return the generate ground overlay option
      */
-    public GroundOverlayOptions getVLBuildingOverlay() {
+    public GroundOverlayOptions getVLBuildingOverlay(){
+        //w: 66.5   h: 69.98
+        //80x45
         return new GroundOverlayOptions()
-                .position(new LatLng(45.45902065060446, -73.6383318901062), (float) 68, (float) 68)
+                .position(new LatLng( 45.45909, -73.63844), (float) 80, (float) 45)
                 .image(BitmapDescriptorFactory.fromResource(R.drawable.vl_2))
-                .bearing((float) 34);
+                .bearing((float) 210);
     }
 
-    public GroundOverlay setVLFloorplan(GroundOverlay groundOverlay, int floorNb) {
-        if (floorNb == 1) return setVL1Floorplan(groundOverlay);
-        else if (floorNb == 2) return setVL2Floorplan(groundOverlay);
-        else return null;
+    /**
+     * set ground overlay image for VL floors
+     * @param groundOverlay
+     * @param floorNb
+     */
+    public void setVLFloorplan(GroundOverlay groundOverlay, int floorNb){
+        if(floorNb == 1)  setVL1Floorplan(groundOverlay);
+        else if(floorNb == 2) setVL2Floorplan(groundOverlay);
     }
 
-    private GroundOverlay setVL1Floorplan(GroundOverlay groundOverlay) {
+    /**
+     * set ground overlay image for VL 1st floor
+     * @param groundOverlay
+     */
+    private void setVL1Floorplan(GroundOverlay groundOverlay){
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.vl_1));
-        return groundOverlay;
     }
 
-    private GroundOverlay setVL2Floorplan(GroundOverlay groundOverlay) {
+    /**
+     * set ground overlay image for VL 2nd floor
+     * @param groundOverlay
+     */
+    private void setVL2Floorplan(GroundOverlay groundOverlay){
         groundOverlay.setImage(BitmapDescriptorFactory.fromResource(R.drawable.vl_2));
-        return groundOverlay;
     }
+
 
     /**
      * @param layer the GeoJson layer containing features to style.
@@ -182,6 +215,7 @@ public class LocationFragmentViewModel extends ViewModel {
                         .flat(true)
                         .anchor(0.5f, 0.5f)
                         .alpha(0.90f)
+                        .title(buildingCode.toString())
         );
         marker.setTag(buildingCode);
     }
@@ -219,9 +253,9 @@ public class LocationFragmentViewModel extends ViewModel {
     }
 
 
-    public List<String> getFloorsAvailable(BuildingCode buildingCode) {
+    public ArrayList<String> getFloorsAvailable(BuildingCode buildingCode){
         ArrayList<String> floorsAvailable = new ArrayList<>();
-        switch (buildingCode) {
+        switch(buildingCode){
             case H:
                 floorsAvailable.add("hall_9");
                 floorsAvailable.add("hall_8");
@@ -233,7 +267,6 @@ public class LocationFragmentViewModel extends ViewModel {
             case VL:
                 floorsAvailable.add("vl_2");
                 floorsAvailable.add("vl_1");
-                return floorsAvailable;
             default:
                 return floorsAvailable;
         }
@@ -244,7 +277,7 @@ public class LocationFragmentViewModel extends ViewModel {
      * @param buildingCode it represents which building we will be covering
      * @return Int of drawable resource's bitmap representation
      */
-    public int getIcon(BuildingCode buildingCode) {
+    public int getIcon(BuildingCode buildingCode){
         switch (buildingCode) {
             case H:
                 return R.drawable.h;
@@ -319,7 +352,7 @@ public class LocationFragmentViewModel extends ViewModel {
 
     private void setFloorLayers(String jsonCode) {
         try {
-            InputStream inputStream = getActivity().getAssets().open(jsonCode + ".json");
+           // InputStream inputStream = getActivity().getAssets().open(jsonCode + ".json");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
