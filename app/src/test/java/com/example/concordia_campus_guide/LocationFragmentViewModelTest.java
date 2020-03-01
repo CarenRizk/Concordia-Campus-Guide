@@ -2,9 +2,12 @@ package com.example.concordia_campus_guide;
 
 import android.graphics.Color;
 
+import com.example.concordia_campus_guide.Activities.MainActivityViewModel;
 import com.example.concordia_campus_guide.Fragments.LocationFragment.LocationFragmentViewModel;
 import com.example.concordia_campus_guide.Models.Building;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.maps.android.geojson.GeoJsonFeature;
+import com.google.maps.android.geojson.GeoJsonLayer;
 import com.google.maps.android.geojson.GeoJsonPolygonStyle;
 
 
@@ -27,6 +30,7 @@ import static junit.framework.TestCase.assertNotNull;
 public class LocationFragmentViewModelTest  {
     private LocationFragmentViewModel viewModel;
     private HashMap<String, Building> buildings;
+    private MainActivityViewModel mainActivityViewModel;
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
@@ -41,6 +45,7 @@ public class LocationFragmentViewModelTest  {
         buildings.put("VL", new Building(new Double[]{45.45909, -73.63844}, new String[]{"1","2"}, 80, 45, 210, null, "VL", null, null, null, null, null));
         viewModel.setBuildings(buildings);
     }
+
 
     @Test
     public void getPolygonStyleTest(){

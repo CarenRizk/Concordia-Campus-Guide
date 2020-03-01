@@ -37,7 +37,7 @@ public class LocationFragmentInstrumentalTest {
     @Test
     public void styleMarker(){
         BitmapDescriptor bitmap1 = viewModel.styleMarker("EV",appContext);
-        BitmapDescriptor bitmap2 = viewModel.styleMarker("EV",appContext);
+        BitmapDescriptor bitmap2 = viewModel.styleMarker("H",appContext);
         assertNotNull(bitmap1);
         assertNotNull(bitmap2);
     }

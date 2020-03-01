@@ -1,4 +1,5 @@
 package com.example.concordia_campus_guide.Fragments.LocationFragment;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

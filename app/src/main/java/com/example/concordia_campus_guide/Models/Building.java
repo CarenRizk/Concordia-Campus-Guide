@@ -168,6 +168,7 @@ public class Building {
         if(Departments.isEmpty()){
             return "";
         }
+        String s = TextUtils.join(", ", Departments);
         return TextUtils.join(", ", Departments);
     }
 
