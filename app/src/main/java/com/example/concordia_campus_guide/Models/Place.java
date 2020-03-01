@@ -2,8 +2,9 @@ package com.example.concordia_campus_guide.Models;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class Place {
+public abstract class Place {
     protected Double[] centerCoordinates;
+    protected String displayName;
 
     public Place(Double[] centerCoordinates) {
         this.centerCoordinates = centerCoordinates;
@@ -20,4 +21,6 @@ public class Place {
     public void setCenterCoordinates(Double[] centerCoordinates) {
         this.centerCoordinates = centerCoordinates;
     }
+
+    public abstract String getDisplayName();
 }

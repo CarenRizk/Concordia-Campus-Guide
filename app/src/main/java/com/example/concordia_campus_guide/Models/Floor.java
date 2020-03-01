@@ -1,7 +1,5 @@
 package com.example.concordia_campus_guide.Models;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.List;
 
 class Floor extends Place {
@@ -12,5 +10,9 @@ class Floor extends Place {
         super(coordinates);
         this.number = number;
         this.altitude = altitude;
+    }
+
+    public String getDisplayName(){
+        return number;
     }
 }
